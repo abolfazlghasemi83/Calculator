@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Scientific Calculator</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;500;700&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+       
+        :root {
+            --primary: #0984e3;
+            --linkedin-color: #0077B5;
+            --telegram-color: #229ED9;
+            --github-color: #333; 
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0a0a2a, #1a0a3a, #2a0a4a, #3a0a5a);
+            background-size: 400% 400%;
+            animation: gradientAnimation 15s ease infinite;
+            overflow-x: hidden;
+            color: white;
+            padding: 20px 0;
+        }
+
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+     
+        .background-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px); 
+            z-index: 1;
+            opacity: 0.5; 
+            animation: float 15s infinite alternate; 
+        }
+
+        .blob-1 {
+            width: 400px;
+            height: 400px;
+            background: rgba(135, 206, 235, 0.7); 
+            top: -100px;
+            left: -100px;
+        }
+
+        .blob-2 {
+            width: 500px;
+            height: 500px;
+            background: rgba(255, 105, 180, 0.7); 
+            bottom: -150px;
+            right: -150px;
+            animation-delay: -5s;
+        }
+
+        .blob-3 {
+            width: 350px;
+            height: 350px;
+            background: rgba(147, 112, 219, 0.7); 
+            top: 20%;
+            left: 20%;
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(50px, 70px) scale(1.1); }
+        }
+
+        
+        .main-container {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            gap: 20px;
+            align-items: stretch;
+            height: 650px;
+        }
+
+       
+        .history-panel {
+            width: 240px; 
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            direction: ltr; 
+        }
+
+        .history-title {
+            font-size: 1.2rem; 
+            margin-bottom: 15px;
+            color: #87ceeb; 
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 10px;
+            text-align: center;
+        }
+
+        .history-list {
+            flex-grow: 1;
+            overflow-y: auto;
+            list-style: none;
+        }
+
+        .history-list::-webkit-scrollbar {
+            width: 5px;
+        }
+        .history-list::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+        }
+
+        .history-item {
+            background: rgba(0,0,0,0.2);
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: 0.3s;
+            direction: ltr; 
+            text-align: right;
+        }
+
+        .history-item:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .history-eq {
+            color: #ccc;
+            font-size: 0.8rem;
+            margin-bottom: 4px;
+        }
+        .history-res {
+            color: #87ceeb; 
+            font-weight: bold;
+        }
+
+     
+        .calculator {
+            width: 360px;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .display-screen {
+            width: 100%;
+            height: 90px;
+            margin-bottom: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            text-align: right; 
+            padding: 15px;
+            color: #fff;
+            font-size: 2.2rem;
+            border: none;
+            outline: none;
+            direction: ltr; 
+            font-family: 'Consolas', monospace;
+            letter-spacing: 1px;
+        }
+
+    
+        .buttons-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            flex-grow: 1;
+        }
+
+        button {
+            border-radius: 12px;
+            border: none;
+            outline: none;
+            background: rgba(255, 255, 255, 0.07);
+            color: #fff;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        button:active {
+            transform: scale(0.92);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        button:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .scientific {
+            font-size: 0.95rem;
+            color: #a0a0a0;
+        }
+
+        .clear-btn {
+            color: #ff69b4; 
+            background: rgba(255, 105, 180, 0.1);
+        }
+
+    
+        .main-operator {
+            color: #87ceeb;
+            background: #2a3a5a; 
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        
+        .equal {
+            background: linear-gradient(135deg, #9370db 0%, #6a5acd 100%); 
+            color: #fff;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(147, 112, 219, 0.4);
+            border: none;
+            font-size: 1.5rem;
+        }
+        .equal:hover {
+            opacity: 0.9;
+            background: linear-gradient(135deg, #9370db 0%, #6a5acd 100%);
+        }
+
+
+        .zero-btn {
+            grid-column: span 2;
+        }
+
+      
+        .nroot-btn-content {
+            position: relative;
+            display: inline-block;
+            font-size: 1.1em; 
+            line-height: 1; 
+        }
+        .nroot-btn-content span.root-index {
+            position: absolute;
+            top: -0.5em; 
+            left: 0.1em; 
+            font-size: 0.7em; 
+            color: #ff69b4; 
+        }
+
+     
+        footer { 
+            font-family: 'Arial', sans-serif; 
+            padding: 40px 20px 50px; 
+            font-size: 1rem;
+            opacity: 1; 
+            display: flex; 
+            flex-direction: column;
+            gap: 20px; 
+            justify-content: center; 
+            align-items: center;
+            max-width: 800px; 
+            width: 90%; 
+            margin: 50px auto 0; 
+            border-top: 5px solid var(--primary); 
+            background: rgba(255, 255, 255, 0.05); 
+            border-radius: 15px 15px 0 0; 
+            text-align: center;
+            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.3); 
+            transition: background 0.3s;
+            color: white; 
+            direction: ltr; 
+        }
+
+        .footer-text {
+            font-weight: 800;
+            font-size: 1.2rem; 
+            color: white; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .footer-links {
+            display: flex; 
+            gap: 20px; 
+            justify-content: center;
+            flex-wrap: wrap; 
+        }
+        
+        .footer-links a {
+            display: flex; 
+            align-items: center;
+            padding: 8px 15px; 
+            border-radius: 25px; 
+            text-decoration: none;
+            font-size: 1rem; 
+            font-weight: 700;
+            color: white; 
+            transition: transform 0.2s, opacity 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .footer-links a i {
+            font-size: 1.2rem; 
+            margin-right: 8px; 
+            margin-left: 0;
+        }
+
+        .footer-links a:hover {
+            transform: translateY(-3px) scale(1.02); 
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .footer-links .link-linkedin {
+            background-color: var(--linkedin-color);
+        }
+        .footer-links .link-telegram {
+            background-color: var(--telegram-color);
+        }
+        .footer-links .link-github {
+            background-color: white; 
+            color: var(--github-color);
+        }
+
+
+        @media (max-width: 700px) {
+            .main-container {
+                flex-direction: column-reverse;
+                height: auto;
+            }
+            .history-panel {
+                width: 90%;
+                margin: 0 auto;
+                height: 150px;
+            }
+            .calculator {
+                width: 90%;
+                margin: 0 auto;
+            }
+            
+        
+            footer {
+                width: 90%;
+                margin-top: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="background-blob blob-1"></div>
+    <div class="background-blob blob-2"></div>
+    <div class="background-blob blob-3"></div>
+
+    <div class="main-container">
+        <div class="history-panel">
+            <div class="history-title">Calculation History</div>
+            <ul class="history-list" id="historyList">
+                </ul>
+        </div>
+
+        <div class="calculator">
+            <input type="text" class="display-screen" id="display" readonly placeholder="0">
+            
+            <div class="buttons-grid">
+                
+                <button class="clear-btn" onclick="clearDisplay()">AC</button>
+                <button class="clear-btn" onclick="deleteLast()">DEL</button>
+                <button class="scientific" onclick="appendValue('^')">^</button>
+                <button class="main-operator" onclick="appendValue('/')">÷</button> 
+
+                <button class="scientific" onclick="appendFunction('sin')">sin</button>
+                <button class="scientific" onclick="appendFunction('cos')">cos</button>
+                <button class="scientific" onclick="appendFunction('tan')">tan</button>
+                <button class="main-operator" onclick="appendValue('*')">×</button> 
+
+                <button class="scientific" onclick="appendFunction('log')">log</button>
+                <button class="scientific" onclick="appendFunction('ln')">ln</button>
+                <button class="scientific" onclick="appendFunction('sqrt')">√</button>
+                <button class="main-operator" onclick="appendValue('-')">-</button> 
+
+                <button class="scientific" onclick="appendValue('(')">(</button>
+                <button class="scientific" onclick="appendValue(')')">)</button>
+                
+                <button class="scientific" onclick="appendFunction('nroot')">
+                    <span class="nroot-btn-content">
+                        <span class="root-index">x</span>&#8730;
+                    </span>
+                </button>
+                <button class="main-operator" onclick="appendValue('+')">+</button> 
+
+                <button onclick="appendValue('7')">7</button>
+                <button onclick="appendValue('8')">8</button>
+                <button onclick="appendValue('9')">9</button>
+                <button class="main-operator" onclick="appendValue('%')">%</button> 
+
+                <button onclick="appendValue('4')">4</button>
+                <button onclick="appendValue('5')">5</button>
+                <button onclick="appendValue('6')">6</button>
+                <button class="equal" onclick="calculate()" style="grid-row: span 2;">=</button> 
+                
+                <button onclick="appendValue('1')">1</button>
+                <button onclick="appendValue('2')">2</button>
+                <button onclick="appendValue('3')">3</button>
+
+                <button class="zero-btn" onclick="appendValue('0')">0</button>
+                <button onclick="appendValue('.')">.</button>
+                </div>
+        </div>
+    </div>
+    
+    <footer id="footer">
+        <div class="footer-text" id="footerText">
+            Created with ❤️ by Abolfazl Ghasemi
+        </div>
+        
+        <div class="footer-links">
+            <a href="https://www.linkedin.com/in/abolfazl-ghasemi55/" target="_blank" title="LinkedIn" class="link-linkedin" id="linkLinkedin">
+                <i class="fab fa-linkedin"></i> 
+                <span id="linkTextLinkedin">LinkedIn</span>
+            </a>
+            <a href="https://t.me/@Geralt_x_rivia" target="_blank" title="Telegram" class="link-telegram" id="linkTelegram">
+                <i class="fab fa-telegram-plane"></i> 
+                <span id="linkTextTelegram">Telegram</span>
+            </a>
+            <a href="https://github.com/abolfazlghasemi83" target="_blank" title="GitHub" class="link-github" id="linkGithub">
+                <i class="fab fa-github"></i> 
+                <span id="linkTextGithub">GitHub</span>
+            </a>
+        </div>
+        
+    </footer>
+
+    <script>
+        const display = document.getElementById('display');
+        const historyList = document.getElementById('historyList');
+        
+        const functionsForAutoClose = ['√', 'sin', 'cos', 'tan', 'log', 'ln']; 
+
+        function appendValue(value) {
+            if(display.value === 'Error' || display.value === 'Infinity' || display.value.startsWith('Error:')) {
+                display.value = '';
+            }
+        
+            if (value === '*') {
+                 display.value += '×';
+            } else if (value === '/') {
+                 display.value += '÷';
+            } else if (value === '.') {
+                const lastChar = display.value.slice(-1);
+                if (lastChar.match(/[0-9]/)) {
+                     display.value += value;
+                } else if (display.value === '' || lastChar.match(/[\+\-×÷%^(\s√]/) || functionsForAutoClose.some(f => display.value.endsWith(f))) {
+                    display.value += '0.';
+                }
+            } else {
+                 display.value += value;
+            }
+        }
+
+        function appendFunction(func) {
+            if(display.value.startsWith('Error:')) display.value = '';
+            
+            if (func === 'sqrt') {
+                display.value += '√'; 
+            } else if (func === 'nroot') {
+                const regex = /([\d\.]+)\s*$/; 
+                const match = display.value.match(regex);
+                
+                if (match) {
+                    const N = match[1]; 
+                    display.value = display.value.slice(0, match.index) + `${N}√`; 
+                } else {
+                    display.value += '√'; 
+                }
+            } else {
+                display.value += func + '('; 
+            }
+        }
+
+        function clearDisplay() {
+            display.value = '';
+        }
+
+        function deleteLast() {
+            if(display.value.startsWith('Error')) {
+                display.value = '';
+            } else {
+                display.value = display.value.toString().slice(0, -1);
+            }
+        }
+
+        const closeParentheses = (str) => {
+            let expression = str;
+            let openParenCount = (expression.match(/\(/g) || []).length;
+            let closeParenCount = (expression.match(/\)/g) || []).length;
+            
+            while (openParenCount > closeParenCount) {
+                expression += ')';
+                closeParenCount++;
+            }
+            return expression;
+        };
+        const convertNthRoot = (expr) => {
+            let expression = expr;
+            
+            const complexRegex = /(\d+\.?\d*)√\((.+?)\)/g; 
+            expression = expression.replace(complexRegex, (match, n, x) => {
+                const N = parseFloat(n);
+                if (N === 0) { throw new Error("0th root undefined"); }
+                return `Math.pow((${x}), 1/${N})`; 
+            });
+            
+        
+            const simpleRegex = /(\d+\.?\d*)√(\d+\.?\d*)/g;
+            expression = expression.replace(simpleRegex, (match, n, x) => {
+                const N = parseFloat(n);
+                if (N === 0) { throw new Error("0th root undefined"); }
+                return `Math.pow(${x}, 1/${N})`;
+            });
+
+            return expression;
+        }
+
+        function evaluateExpression(expr) {
+             let expression = expr;
+
+           
+            expression = expression.replace(/×/g, '*');
+            expression = expression.replace(/÷/g, '/');
+            expression = expression.replace(/\^/g, '**');
+
+           
+            expression = convertNthRoot(expression);
+
+           
+            const rootArgumentRegex = '(\\d+\\.?\\d*|\\([^)(]*\\))'; 
+            expression = expression.replace(new RegExp('√' + rootArgumentRegex, 'g'), 'Math.sqrt($1)');
+
+           
+            expression = expression.replace(/(\d+)\(/g, '$1*('); 
+            expression = expression.replace(/(\))(\d+)/g, '$1*$2'); 
+            expression = expression.replace(/(\))(\()/g, '$1*$2'); 
+            expression = expression.replace(/(\d+|[)])(sin|cos|tan|log|ln)/g, '$1*$2'); 
+            
+
+            
+            const funcArgRegex = '\\((.+?)\\)'; 
+            
+            expression = expression.replace(new RegExp('sin' + funcArgRegex, 'g'), 'Math.sin($1)');
+            expression = expression.replace(new RegExp('cos' + funcArgRegex, 'g'), 'Math.cos($1)');
+            expression = expression.replace(new RegExp('tan' + funcArgRegex, 'g'), 'Math.tan($1)');
+            expression = expression.replace(new RegExp('log' + funcArgRegex, 'g'), 'Math.log10($1)'); 
+            expression = expression.replace(new RegExp('ln' + funcArgRegex, 'g'), 'Math.log($1)'); 
+            
+            
+            if (expression.includes('/0')) {
+                throw new Error("Division by zero");
+            }
+            
+          
+            const result = eval(expression);
+
+            if (isNaN(result) || !isFinite(result)) {
+                throw new Error("Invalid result");
+            }
+
+            return parseFloat(result.toFixed(8));
+        }
+
+
+        function calculate() {
+            let originalExpression = display.value;
+            if (!originalExpression) return;
+            
+            try {
+                const result = evaluateExpression(originalExpression);
+                display.value = result;
+                addToHistory(originalExpression, result);
+                return;
+            } catch (error) {
+                if (error.message.includes("0th root undefined") || error.message.includes("Division by zero")) {
+                    display.value = `Error: ${error.message}`;
+                    return;
+                }
+            }
+
+            
+            try {
+                let correctedExpression = closeParentheses(originalExpression);
+                
+                if (correctedExpression !== originalExpression) {
+                    const result = evaluateExpression(correctedExpression);
+                    display.value = result;
+                    addToHistory(originalExpression, result); 
+                    return;
+                }
+                
+               
+                display.value = 'Error: Check Syntax';
+                
+            } catch (error) {
+               
+                if (error.message.includes("0th root undefined") || error.message.includes("Division by zero")) {
+                    display.value = `Error: ${error.message}`;
+                } else {
+                    display.value = 'Error: Check Syntax';
+                }
+                console.error("Final Calculation Error:", error);
+            }
+        }
+
+        function addToHistory(expr, res) {
+            const li = document.createElement('li');
+            li.className = 'history-item';
+            
+            li.innerHTML = `
+                <div class="history-eq">${expr} =</div>
+                <div class="history-res">${res}</div>
+            `;
+            
+            li.onclick = () => {
+                display.value = res.toString(); 
+            };
+
+            historyList.insertBefore(li, historyList.firstChild);
+        }
+    </script>
+</body>
+</html>
