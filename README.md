@@ -25,7 +25,7 @@ An advanced scientific calculator web application built with HTML, CSS, and vani
 
 1.  **Clone the repository:**
     ```bash
-    git clone [YOUR_REPO_URL]
+    git clone https://github.com/abolfazlghasemi83/Calculator.git
     ```
 2.  **Open the file:** Simply open the `index.html` file in any modern web browser.
 3.  **Start Calculating:**
