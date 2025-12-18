@@ -31,7 +31,7 @@ An advanced scientific calculator web application built with HTML, CSS, and vani
 3.  **Start Calculating:**
     * **Square Root:** Press `√` followed by the number/expression.
     * **N-th Root (e.g., Cube Root):** Type the index (e.g., `3`), then press the $x\sqrt{}$ button (which displays `3√`), followed by the radicand (e.g., `8`).
-    * **Functions:** Functions like `sin` automatically add an opening parenthesis: `sin(`. Remember to close the parenthesis or let the calculator auto-correct it upon pressing `=`.
+    * **Functions:** Functions like `sin` automatically add an opening parenthesis: `sin(`. Remember to close the parenthesis or let the calculator auto-correct it upon pressing ` = `.
 
 ## 🔗 Connect
 
