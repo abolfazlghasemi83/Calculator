@@ -1,5 +1,28 @@
 # 🚀 Advanced Scientific Calculator
 
+<p align="center">
+  <a href="https://abolfazlghasemi83.github.io/Calculator/" target="_blank" style="text-decoration: none;">
+    <span style="
+      display: inline-block;
+      padding: 14px 28px;
+      border-radius: 50px;
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+      border-top: 1px solid rgba(255, 255, 255, 0.3);
+      border-left: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+      color: white;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      transition: transform 0.2s ease;
+    ">
+      🚀 View Live Demo 🚀
+    </span>
+  </a>
+</p>
+
+
 An advanced scientific calculator web application built with HTML, CSS, and vanilla JavaScript. Features a modern, dark glassmorphism design, real-time calculation history, and comprehensive scientific functions, including support for $N$-th roots.
 
 ## 📸 Project Screenshot
