@@ -1,4 +1,4 @@
-# 🚀 Advanced Scientific Calculator
+# Advanced Scientific Calculator
 
 <p align="center">
   <a href="https://abolfazlghasemi83.github.io/Calculator/" target="_blank" style="text-decoration: none;">
